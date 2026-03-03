@@ -1,8 +1,16 @@
 const GAS_URL = import.meta.env.VITE_GOOGLE_APP_SCRIPT_URL;
+
+if (!GAS_URL) {
+  console.error('⚠️ VITE_GOOGLE_APP_SCRIPT_URL 未設定！請檢查 .env 或 GitHub Secrets。');
+}
+
 export const PASS_THRESHOLD = parseInt(import.meta.env.VITE_PASS_THRESHOLD) || 8;
 export const QUESTION_COUNT = parseInt(import.meta.env.VITE_QUESTION_COUNT) || 10;
 
 export async function fetchQuestions() {
+  if (!GAS_URL || GAS_URL === 'undefined') {
+    throw new Error('環境變數 VITE_GOOGLE_APP_SCRIPT_URL 未設定或無效');
+  }
   const url = `${GAS_URL}?action=getQuestions&count=${QUESTION_COUNT}`;
   try {
     const res = await fetch(url);
