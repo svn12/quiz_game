@@ -4,10 +4,21 @@ export const QUESTION_COUNT = parseInt(import.meta.env.VITE_QUESTION_COUNT) || 1
 
 export async function fetchQuestions() {
   const url = `${GAS_URL}?action=getQuestions&count=${QUESTION_COUNT}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('Failed to fetch questions');
-  const data = await res.json();
-  return data.questions;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+    
+    const contentType = res.headers.get('content-type');
+    if (contentType && contentType.includes('text/html')) {
+      throw new Error('GAS 返回了 HTML 而非 JSON (可能是權限設定錯誤或 URL 錯誤)');
+    }
+    
+    const data = await res.json();
+    return data.questions;
+  } catch (err) {
+    console.error('Fetch error:', err);
+    throw err;
+  }
 }
 
 export async function submitAnswers(userId, answers) {
