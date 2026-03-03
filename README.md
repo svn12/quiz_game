@@ -1,16 +1,49 @@
-# React + Vite
+# ⚔ 闖關問答 ⚔ (Pixel Quiz Game)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+這是一個使用 React + Vite 製作的像素風格闖關問答遊戲。
 
-Currently, two official plugins are available:
+## 🚀 技術棧
+- **Frontend**: React, Vite
+- **Styling**: Vanilla CSS (Pixel Art 風格)
+- **Backend**: Google Sheets + Google Apps Script
+- **Deployment**: GitHub Pages + GitHub Actions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠 設定流程
 
-## React Compiler
+### 1. Google Sheets & Apps Script 設定
+1. 建立一個新的 Google Sheet。
+2. 建立兩個工作表：「題目」與「回答」。
+3. 在 A1 分別貼上 `backend.gs` 中說明的 Header 字串。
+4. 點擊 `擴充功能 > Apps Script`，貼入 `backend.gs` 的代碼。
+5. 部署為「網頁應用程式」，並設定為「所有人」皆可存取。
+6. 複製產出的 `Web App URL`。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. 本地開發
+1. 複製 `.env.example` 為 `.env`。
+2. 填入你的 `VITE_GOOGLE_APP_SCRIPT_URL`。
+3. 執行：
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-## Expanding the ESLint configuration
+### 3. GitHub Actions 自動部署
+本專案已設定好 GitHub Actions。當你推送到 `main` 分支時，會自動進行部署。
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+#### 設定步驟：
+1. 到 GitHub Repository 的 `Settings > Secrets and variables > Actions`。
+2. 點擊 `New repository secret`，新增以下三個參數：
+   - `VITE_GOOGLE_APP_SCRIPT_URL`: 你的 GAS Web App URL。
+   - `VITE_PASS_THRESHOLD`: 通關門檻題數（例如 `8`）。
+   - `VITE_QUESTION_COUNT`: 每次遊戲題目數量（例如 `10`）。
+3. 往後只需 `git push` 到 `main` 即可自動更新線上版本。
+
+---
+
+## 🎨 UI 設計
+- **字型**: `Press Start 2P` (英數), `DotGothic16` (中文)。
+- **風格**: 2000 年代街機設計，包含 CRT 掃描線效果與像素外框。
+- **角色**: 使用 DiceBear API 自動生成 100 個獨特的像素關主。
+
+## 📦 部署位置
+部署後的網站通常位於：`https://<你的帳號>.github.io/quiz_game/`
